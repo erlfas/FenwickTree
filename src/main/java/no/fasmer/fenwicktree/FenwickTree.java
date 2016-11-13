@@ -211,18 +211,18 @@ public final class FenwickTree {
     public List<Integer> getTree() {
         final List<Integer> values = new ArrayList<>(this.tree.length);
         
-        for (int i = 0; i < this.tree.length; ++i) {
+        for (int i = 1; i < this.tree.length; ++i) {
             values.add(this.tree[i]);
         }
         
         return values;
     }
     
-    int getParent(int index) {
+    public int getParent(int index) {
         return index - (index & (-index));
     }
     
-    int getNext(int index) {
+    public int getNext(int index) {
         return index + (index & (-index));
     }
 }

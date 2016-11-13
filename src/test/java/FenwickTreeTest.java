@@ -1,7 +1,6 @@
 
+import java.util.List;
 import no.fasmer.fenwicktree.FenwickTree;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -112,17 +111,6 @@ public class FenwickTreeTest {
         assertThat(tree.getFrequencyOfNode(7), is(-5));
         assertThat(tree.getFrequencyOfNode(8), is(0));
         assertThat(tree.getFrequencyOfNode(9), is(7));
-        
-        System.out.println(tree.getFrequencyOfNode(0));
-        System.out.println(tree.getFrequencyOfNode(1));
-        System.out.println(tree.getFrequencyOfNode(2));
-        System.out.println(tree.getFrequencyOfNode(3));
-        System.out.println(tree.getFrequencyOfNode(4));
-        System.out.println(tree.getFrequencyOfNode(5));
-        System.out.println(tree.getFrequencyOfNode(6));
-        System.out.println(tree.getFrequencyOfNode(7));
-        System.out.println(tree.getFrequencyOfNode(8));
-        System.out.println(tree.getFrequencyOfNode(9));
         
     }
     
@@ -270,6 +258,66 @@ public class FenwickTreeTest {
         assertThat(tree.getFrequencyOfNode(7), is(8));
         assertThat(tree.getFrequencyOfNode(8), is(9));
         assertThat(tree.getFrequencyOfNode(9), is(10));
+    }
+    
+    @Test
+    public void getParentTest() {
+        /** Tree with decimal indexes
+         *       4
+         *      / \
+         *     /   \
+         *    /     \
+         *   2       6
+         *  / \     / \
+         * 1   3   5   7
+         */
+        
+        /**  Tree with binary indexes
+         *       100
+         *       /  \
+         *      /    \
+         *     /      \
+         *    /        \
+         *   010       110
+         *  /   \     /   \
+         * 001  011  101  111
+         */
+        
+        /** Tree with binary walking directions     
+         *    (empty)
+         *     /   \
+         *    /     \
+         *   0       1
+         *  / \     / \
+         * 00  01  10  11
+         */
+        
+        /**
+         *  The parent of a node is the the first node you get when going
+         *  up the tree along a right edge.
+         */
+        
+        final FenwickTree tree = new FenwickTree(7);
+        
+        assertThat(tree.getParent(1), is(0));
+        assertThat(tree.getParent(2), is(0));
+        assertThat(tree.getParent(3), is(2));
+        assertThat(tree.getParent(4), is(0));
+        assertThat(tree.getParent(5), is(4));
+        assertThat(tree.getParent(6), is(4));
+        assertThat(tree.getParent(7), is(6));
+    }
+    
+    @Test
+    public void getTreeTest() {
+        final FenwickTree tree = new FenwickTree(1,2,3,4,5,6,7);
+        // [1, 3, 3, 10, 5, 11, 7]
+        final List<Integer> bareTree = tree.getTree();
+        
+        // The user accesses the tree with indexes 0, 1, ..., 6
+        // Internally indexes 1, 2, ..., 7 are used
+        // So the frequency of node 6 from the users perspective is the sum of nodes 7, 6 and 4 in the drawing above
+        assertThat(tree.getCumulativeFrequencyOfNode(6), is(bareTree.get(6)+bareTree.get(5)+bareTree.get(3)));
     }
     
 }
